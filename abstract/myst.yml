@@ -20,7 +20,7 @@ project:
     #   affiliation: ubc
     #   email: doug@eos.ubc.ca
     #   orcid: 0000-0002-4327-2124
-  # banner: banner.png
+  banner: banner.png
   thumbnail: thumbnail.png
   subject: Inversion
   venue:
