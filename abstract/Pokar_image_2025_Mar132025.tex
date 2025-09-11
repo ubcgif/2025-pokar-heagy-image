@@ -16,8 +16,8 @@
 \email{ppokar@eoas.ubc.ca}
 
 % \footer{Example}
-\lefthead{Pokar \& Heagy}
-\righthead{Parametric RBF inversion}
+% \lefthead{Pokar \& Heagy}
+% \righthead{Parametric RBF inversion}
 
 \maketitle
 \begin{abstract}
@@ -34,23 +34,23 @@ Inversion of geophysical data is a crucial step in mineral exploration for ident
 
 Traditional least squares regularized inversion techniques struggle with shapes that have sharp edges or small physical property contrasts. An alternative is parametric shape-based inversion, where shapes such as rectangular prisms \citep{belliveau_parametric_2023} or ellipsoids \citep{mcmillan_3d_2015} are deformed using a set of associated parameters to recover the target. Parametric methods offer the significant advantage of reducing the total parameter space of the inverse problem. These methods, however, have notable drawbacks: (1) they require prior knowledge and initialization of the expected number of targets; (2) they perform poorly if the target deviates from the assumed parameterized shape.
 
-Methods based on parametric basis functions have been shown to be able to address these issues  \citep{aghasi_parametric_2011,kadu_salt_2017, ozsar_parametric_2025}. Instead of selecting a predefined parameterized shape, approaches based on Radial Basis Functions (RBFs) offer the benefits of parametric inversion without imposing strict shape constraints. 
+Methods based on parametric basis functions have been shown to be able to address these issues  \citep{aghasi_parametric_2011,kadu_salt_2017, ozsar_parametric_2025}. Instead of selecting a predefined parameterized shape, approaches based on Radial Basis Functions (RBFs) offer the benefits of parametric inversion without imposing strict shape constraints.
 
-In this work, we adapt the RBF method originally described by \citep{aghasi_parametric_2011}. We parameterize the model space with a user-defined number of RBFs, each associated with scalar weights that serve as the inversion parameters. The RBFs form a level-set function that is binarized using a chosen indicator function, which defines the width of the boundary between the shape and background model helping to delineate the target shape. The level-set is updated during the inversion to find a model that fits the data. We validate this method using two models. The first features two distinct targets: a rectangular block and a sphere, while the second contains an anomaly with an arbitrary shape. Both are imaged using a 2D DC Resistivity (DCR) survey. The anomaly is treated as a level-set with fixed conductivity. While we demonstrate the method in 2D DCR, it is not limited to this setting. The approach is both method- and dimension-agnostic and has been successfully applied to 3D problems and other geophysical data types, including potential field and seismic data \citep{kadu_salt_2017}.  
+In this work, we adapt the RBF method originally described by \citep{aghasi_parametric_2011}. We parameterize the model space with a user-defined number of RBFs, each associated with scalar weights that serve as the inversion parameters. The RBFs form a level-set function that is binarized using a chosen indicator function, which defines the width of the boundary between the shape and background model helping to delineate the target shape. The level-set is updated during the inversion to find a model that fits the data. We validate this method using two models. The first features two distinct targets: a rectangular block and a sphere, while the second contains an anomaly with an arbitrary shape. Both are imaged using a 2D DC Resistivity (DCR) survey. The anomaly is treated as a level-set with fixed conductivity. While we demonstrate the method in 2D DCR, it is not limited to this setting. The approach is both method- and dimension-agnostic and has been successfully applied to 3D problems and other geophysical data types, including potential field and seismic data \citep{kadu_salt_2017}.
 
 \vspace{-0.45cm}
 \section{Level-Set Approach to Inversion}
 \vspace{-0.25cm}
 
-In geophysical inverse problems, a common goal is to determine the location, shape, and physical properties of a target of interest in a heterogeneous background. Consider a general inverse problem where the forward model is: 
+In geophysical inverse problems, a common goal is to determine the location, shape, and physical properties of a target of interest in a heterogeneous background. Consider a general inverse problem where the forward model is:
 \begin{equation}
 	F(\mathbf{m}) + \eta = \mathbf{d}
 \end{equation}
-with $\mathbf{m}$ representing the discretized model, $\mathbf{d}$ the observed data, and $F$ the forward operator that maps the model to the data space. Here, $\eta$ is the noise in the data, usually assumed to be Gaussian. 
+with $\mathbf{m}$ representing the discretized model, $\mathbf{d}$ the observed data, and $F$ the forward operator that maps the model to the data space. Here, $\eta$ is the noise in the data, usually assumed to be Gaussian.
 
-For level-set methods, we define the shape and location of the target as the $c$ level-set of some function ${\phi(\mathbf{x})} = c$ where $\mathbf{x}$ denotes the spatial coordinates in model space and $c$ is a scalar (usually taken to be zero). In cases where one or more anomalous bodies in present in a background, the overall model space can then be discretized as  
+For level-set methods, we define the shape and location of the target as the $c$ level-set of some function ${\phi(\mathbf{x})} = c$ where $\mathbf{x}$ denotes the spatial coordinates in model space and $c$ is a scalar (usually taken to be zero). In cases where one or more anomalous bodies in present in a background, the overall model space can then be discretized as
  \begin{equation}\label{model_eq}
-\mathbf{m(x, p)} = \mathbf{m_0(x)} + H\big(\mathbf{\phi(x,p)}\big)\mathbf{m_p(x)} 
+\mathbf{m(x, p)} = \mathbf{m_0(x)} + H\big(\mathbf{\phi(x,p)}\big)\mathbf{m_p(x)}
 \end{equation}
 where $\mathbf{m_0(x)}$ is the background model and $\mathbf{m_p(x)}$ describes the physical properties of the anomalous bodies; in the simplest case, $\mathbf{m_0(x)}$ and and $\mathbf{m_p(x)}$ are scalars. Here, $\mathbf{m_p}$ is multiplied by a level-set function $\phi(\mathbf{x},\mathbf{p})$, where $\mathbf{p}$ is a vector of parameters determined during inversion. The level-set is refined by an indicator function, $H$, which defines the boundary of the level-set domain $\Omega$ (and hence the boundary of the target). A general form of the indicator function is a step function:
 $$H(\mathbf{x}) = \begin{cases}
@@ -58,10 +58,10 @@ $$H(\mathbf{x}) = \begin{cases}
 	0, & \text{otherwise}
 \end{cases}$$
 
-For parametric level-set methods, the level-set function $\phi(\mathbf{x})$ is represented in terms of a set of parameters $\mathbf{p}$. In geometric parameterizations (e.g., ellipses or prisms), $\mathbf{p}$ might include the location of the shape’s centre, strike and dip extents, rotation angles, etc. \citep{belliveau_parametric_2023}. In contrast, this work eschews geometric parameterization of the level-set function in favour of Radial Basis Functions (RBFs), given that any smooth level-set function can be approximated by a linear combination of a set of sufficiently smooth RBFs \citep{aghasi_parametric_2011}. 
+For parametric level-set methods, the level-set function $\phi(\mathbf{x})$ is represented in terms of a set of parameters $\mathbf{p}$. In geometric parameterizations (e.g., ellipses or prisms), $\mathbf{p}$ might include the location of the shape’s centre, strike and dip extents, rotation angles, etc. \citep{belliveau_parametric_2023}. In contrast, this work eschews geometric parameterization of the level-set function in favour of Radial Basis Functions (RBFs), given that any smooth level-set function can be approximated by a linear combination of a set of sufficiently smooth RBFs \citep{aghasi_parametric_2011}.
 
 We first define a set of RBFs, $\psi(\mathbf{r})$, centred on a grid with a spacing ($\mathbf{x_{rbf}}$) that is sparser than the simulation grid (denoted by $\mathbf{x}$). Here, $\mathbf{r} = \mathbf{x} - \mathbf{x_{rbf}}$. Then, we represent the level-set function as a weighted sum of these RBFs:
-\begin{equation}\label{rbf_param} 
+\begin{equation}\label{rbf_param}
 \phi(\mathbf{x},\mathbf{p}) = \sum_{j=1}^{n_{rbf}} \alpha_j  \psi\Big(\beta \| \mathbf{x} - \mathbf{x}_{rbf,j}\|\Big)\end{equation}
 where $\alpha_j$ is the scaling parameter for the $j^{th}$ RBF, and $\beta$ is the dilation parameter that determines its width (Figure \ref{fig:rbf}).
 
@@ -95,7 +95,7 @@ H\big[\phi(\mathbf{x},\epsilon)\big] = \begin{cases}
     \label{fig:heaviside}
 \end{figure}
 
-Figure \ref{fig:heaviside} illustrates this Heaviside function. Here, $\epsilon$ controls the steepness of the transition; choosing an appropriate $\epsilon$ is crucial, as an overly steep or flat transition can lead to numerical instabilities (e.g., vanishing gradients). 
+Figure \ref{fig:heaviside} illustrates this Heaviside function. Here, $\epsilon$ controls the steepness of the transition; choosing an appropriate $\epsilon$ is crucial, as an overly steep or flat transition can lead to numerical instabilities (e.g., vanishing gradients).
 
 We update $\epsilon$ at each iteration and define it as a fraction of the dynamic range of the level-set function \citep{kadu_salt_2017}:
 \begin{equation}\label{trans_width}
@@ -109,12 +109,12 @@ Thus, the inverse problem is formulated as a minimization of a misfit function w
 \begin{equation}\label{inv_prob}
 \min_{\mathbf{p}} ||F\big(\mathbf{m(x,p)}\big) - \mathbf{d}|| + \lambda R({\mathbf{p}})
 \end{equation}
-where $\lambda$ is a weighting factor for the regularization term $R$ that can be applied to the parameters $\mathbf{p}$. 
+where $\lambda$ is a weighting factor for the regularization term $R$ that can be applied to the parameters $\mathbf{p}$.
 
-We then invert the data by solving the minimization problem in equation \eqref{inv_prob} using a Gauss-Newton optimization method. The necessary derivatives are computed automatically via the \textit{autograd} functionality in PyTorch \citep{ansel_pytorch_2024}. 
+We then invert the data by solving the minimization problem in equation \eqref{inv_prob} using a Gauss-Newton optimization method. The necessary derivatives are computed automatically via the \textit{autograd} functionality in PyTorch \citep{ansel_pytorch_2024}.
 
 \vspace{-0.45cm}
-\section{Examples} 
+\section{Examples}
 \vspace{-0.25cm}
 
 We test our inversion approach using a synthetic 2D DC resistivity survey. Two model scenarios are examined: one containing compact targets (a block and a circular target) in a halfspace, and one where we aim to estimate depth to a basement layer. The data are generated for a dipole-dipole configuration with electrodes spaced every 50 m along $x = [-1000, 1000]$ on a flat topography. All simulations and inversions are performed using the SimPEG package \citep{heagy_framework_2017,cockett_simpeg_2015}.
@@ -140,7 +140,7 @@ Our inverted model (Figure \ref{fig:block_sphere}d) successfully recovers the ge
 
 To further evaluate our method, we test it on a model that simulates depth-to-basement variations. The true model (Figure \ref{fig:d2b}a) represents a two-layer Earth with a higher-conductivity lower layer (the \lq\lq basement\rq\rq) whose depth varies sinusoidally. At its shallowest the basement is at $z=-200$ m and further along the line the basement deepens up to $z=-500$ m. The simulation mesh uses a 40 $\times$ 40 cell grid with 50 m spacing, resulting in 800 active cells.
 
-For the RBF inversion (Figure \ref{fig:d2b}b), the RBFs are arranged similarly to the previous example but are spaced every 200 m, resulting in 128 parameters to be estimated in the inversion. The $\alpha$ parameters are again initialized from a normal distribution with a standard deviation of 0.1. Here, RBFs located above $z = -600$ m are assigned a large negative weight ($\alpha = -10$) to introduce a conductive layer in the initial model at a depth where the survey starts losing sensitivity. This constraint is necessary in the absence of explicit regularization. 
+For the RBF inversion (Figure \ref{fig:d2b}b), the RBFs are arranged similarly to the previous example but are spaced every 200 m, resulting in 128 parameters to be estimated in the inversion. The $\alpha$ parameters are again initialized from a normal distribution with a standard deviation of 0.1. Here, RBFs located above $z = -600$ m are assigned a large negative weight ($\alpha = -10$) to introduce a conductive layer in the initial model at a depth where the survey starts losing sensitivity. This constraint is necessary in the absence of explicit regularization.
 
 The resulting inverted model (Figure \ref{fig:d2b}c) effectively recovers the undulating structure of the basement layer, despite the limited sensitivity of the survey at these depths.
 
@@ -155,11 +155,11 @@ The resulting inverted model (Figure \ref{fig:d2b}c) effectively recovers the un
 \section{Conclusion}
 \vspace{-0.25cm}
 
-In this work, we have demonstrated that the RBF level-set approach offers a flexible framework for geophysical inversion. Our results highlight the method’s ability to recover arbitrarily shaped features, as illustrated by both the compact targets in a halfspace and the undulating basement in a two-layer model. Importantly, the approach does not require a priori knowledge of the number or geometry of targets, setting it apart from traditional parametric methods. 
+In this work, we have demonstrated that the RBF level-set approach offers a flexible framework for geophysical inversion. Our results highlight the method’s ability to recover arbitrarily shaped features, as illustrated by both the compact targets in a halfspace and the undulating basement in a two-layer model. Importantly, the approach does not require a priori knowledge of the number or geometry of targets, setting it apart from traditional parametric methods.
 
 While our examples focused on 2D DC resistivity surveys, the method is inherently generalizable and can be applied to 3D problems as well as other geophysical techniques, including magnetics, gravity, electromagnetic, and seismic methods.
 
-Our future work will focus on combining this method with hybrid inversion techniques where a weighted least squares inversion can be used to estimate any heterogeneity in the background physical properties \citep{belliveau_parametric_2023}. This information can be incorporated into the model parameterization ($\mathbf{m_0}$ term in equation \ref{model_eq}) or as a reference model for regularization. Another focus will be designing appropriate regularization in the RBF parametric model space. Early efforts show that adding regularization is helpful in introducing a priori knowledge, particularly outside the core sensitivity region of the surveys. 
+Our future work will focus on combining this method with hybrid inversion techniques where a weighted least squares inversion can be used to estimate any heterogeneity in the background physical properties \citep{belliveau_parametric_2023}. This information can be incorporated into the model parameterization ($\mathbf{m_0}$ term in equation \ref{model_eq}) or as a reference model for regularization. Another focus will be designing appropriate regularization in the RBF parametric model space. Early efforts show that adding regularization is helpful in introducing a priori knowledge, particularly outside the core sensitivity region of the surveys.
 
 The inversion process still requires careful selection of bounds and an appropriate initial model to ensure numerical stability. In our experience, the RBF approach is more robust to the initial model as compared to geometric parameterization approaches. Additionally, resolving multiple bodies with different physical properties remains challenging without specialized modifications. Our ongoing research focuses on addressing this limitation by incorporating anisotropic RBFs with stretching and skewing \citep{ozsar_parametric_2025} and associating a physical property parameter with each RBF to recover multi-contrast targets within a single level-set function.
 
