@@ -1,2 +1,4 @@
-# template-repository-conference
-template repository for conference proceedings
+# Parametric Inversions using Radial Basis Functions
+
+Traditional least squares regularized inversion techniques struggle with shapes that have sharp edges or small physical property contrasts.
+We present an inversion technique that provides a robust means for recovering complex, arbitrarily shaped subsurface targets in inversions. By representing the level-set function as a weighted sum of Radial Basis Functions, our approach eliminates the need for a priori assumptions regarding target number or geometry, while significantly reducing the inversion parameter space. Synthetic examples using 2D DC resistivity and 3D Muon Tomography surveys demonstrate that the method effectively reconstructs complex geological features. Moreover, the framework is inherently adaptable to a wide range of geophysical techniques, including magnetics, gravity, electromagnetics, etc., thereby offering a flexible alternative to traditional inversion strategies.
